@@ -2,6 +2,10 @@
 
 A self-hosted RSS/Atom feed reader. New links from the feeds you are following pop up on the main page, and when you click one, it disappears. You only see what's unread.
 
+
+https://github.com/user-attachments/assets/1fb071b7-77bd-4917-a0a7-623798c59af1
+
+
 ## Quick Start
 
 1. **Install dependencies**:
@@ -35,7 +39,7 @@ A self-hosted RSS/Atom feed reader. New links from the feeds you are following p
 docker-compose up -d --build
 ```
 
-The app will be available at `http://localhost:3424`. See [DEPLOYMENT.md](DEPLOYMENT.md) for full deployment instructions including Nginx reverse proxy setup.
+The app will be available at `http://localhost:3424`. See [DEPLOYMENT.md](DEPLOYMENT.md) for full deployment instructions (including example reverse proxy setup).
 
 ## License
 
