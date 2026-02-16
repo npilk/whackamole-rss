@@ -6,7 +6,10 @@ This app is containerized and ready for deployment behind a reverse proxy.
 
 ### Initial Setup
 
-1. **Build and start the container**:
+1. **Install dependencies**
+```npm install```
+
+2. **Build and start the container**:
    ```bash
    docker-compose up -d --build
    ```
