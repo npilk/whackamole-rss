@@ -1,0 +1,12 @@
+services:
+  rss-reader:
+    build: .
+    container_name: whackamole-rss
+    restart: unless-stopped
+    ports:
+      - "3424:2999"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - NODE_ENV=production
+      - PORT=2999

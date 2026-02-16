@@ -1,0 +1,102 @@
+<%- include('layout', {view: 'feeds', body: `
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Manage Feeds</h2>
+        
+        <!-- Add new feed form -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-3">Add New Feed</h3>
+            <form action="/feeds" method="POST" class="flex flex-col sm:flex-row gap-3">
+                <input
+                    type="url"
+                    name="url"
+                    placeholder="Enter RSS/Atom feed URL..."
+                    required
+                    class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                <button
+                    type="submit"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:whitespace-nowrap"
+                >
+                    Add Feed
+                </button>
+            </form>
+            <p class="text-sm text-gray-500 mt-2">
+                Examples: https://example.com/feed.xml, https://blog.example.com/rss
+            </p>
+        </div>
+
+        <!-- Current feeds -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold">Current Feeds (${feeds.length})</h3>
+            </div>
+            
+            ${feeds.length === 0 ? `
+                <div class="p-6 text-center">
+                    <p class="text-gray-500">No feeds added yet.</p>
+                    <p class="text-sm text-gray-400 mt-1">Add your first feed above to get started!</p>
+                </div>
+            ` : `
+                <div class="divide-y divide-gray-200">
+                    ${feeds.map(feed => `
+                        <div class="p-6">
+                            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-lg font-medium text-gray-900 mb-1">
+                                        ${feed.title || 'Untitled Feed'}
+                                    </h4>
+                                    <p class="text-sm text-gray-600 mb-2 truncate">
+                                        <a href="${feed.url}" target="_blank" class="text-blue-700 hover:text-blue-800">
+                                            ${feed.url}
+                                        </a>
+                                    </p>
+                                    ${feed.description ? `
+                                        <p class="text-sm text-gray-500 mb-3">
+                                            ${feed.description.substring(0, 150)}${feed.description.length > 150 ? '...' : ''}
+                                        </p>
+                                    ` : ''}
+                                    <div class="flex flex-wrap items-center text-xs text-gray-500 gap-x-4 gap-y-1">
+                                        <span>Added: ${new Date(feed.created_at).toLocaleDateString()}</span>
+                                        ${feed.last_fetched ? `
+                                            <span>Last updated: ${new Date(feed.last_fetched).toLocaleString()}</span>
+                                        ` : `
+                                            <span class="text-orange-600">Not yet fetched</span>
+                                        `}
+                                    </div>
+                                </div>
+                                <div class="sm:ml-4 flex-shrink-0">
+                                    <button
+                                        onclick="deleteFeed(${feed.id})"
+                                        class="text-red-600 hover:text-red-800 text-sm font-medium"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `}
+        </div>
+
+        ${feeds.length > 0 ? `
+            <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-slate-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h4 class="text-sm font-medium text-slate-800">
+                            Auto-update enabled
+                        </h4>
+                        <p class="text-sm text-slate-700">
+                            Feeds are automatically checked for new articles every 30 minutes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        ` : ''}
+    </div>
+`}) %>
