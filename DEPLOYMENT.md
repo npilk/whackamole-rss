@@ -15,7 +15,7 @@ The app will be available at `http://localhost:3424`.
 
 ### Nginx Configuration
 
-To serve behind Nginx, add this to your configuration:
+To serve behind Nginx reverse proxy, add this to your configuration:
 
 ```nginx
 server {
@@ -32,37 +32,12 @@ server {
 }
 ```
 
-### Easy Updates via Git
-
-To deploy updates when you push changes to Git:
-
-1. **Clone this repository on your server**:
-   ```bash
-   git clone <your-repo-url> /path/to/whackamole-rss
-   cd /path/to/whackamole-rss
-   ```
-
-2. **Run the deployment script**:
-   ```bash
-   ./deploy.sh
-   ```
-
-The script will:
-- Pull latest changes from Git
-- Stop the existing container
-- Rebuild and restart with new code
-- Show container status
-
 ### Manual Commands
 
 - **View logs**: `docker-compose logs -f`
 - **Restart**: `docker-compose restart`
 - **Stop**: `docker-compose down`
 - **Update and rebuild**: `docker-compose up -d --build`
-
-### Data Persistence
-
-The SQLite database is stored in `./data/rss_reader.db`, which is volume-mounted from the host. Your data persists across container rebuilds.
 
 ### Port Configuration
 
