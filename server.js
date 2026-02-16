@@ -293,28 +293,6 @@ async function fetchFeedArticles(feedId, feedUrl, markAsReadInitially = false) {
   }
 }
 
-function pruneOldArticles() {
-  return new Promise((resolve, reject) => {
-    const query = `
-      DELETE FROM articles
-      WHERE is_read = 1
-        AND id NOT IN (
-          SELECT id FROM articles
-          WHERE is_read = 1
-          ORDER BY COALESCE(pub_date, created_at) DESC, id DESC
-          LIMIT 500
-        )
-    `;
-    db.run(query, [], function (err) {
-      if (err) reject(err);
-      else {
-        if (this.changes > 0) console.log(`Pruned ${this.changes} old read articles`);
-        resolve(this.changes);
-      }
-    });
-  });
-}
-
 // Fetch all feeds every 30 minutes
 cron.schedule('*/30 * * * *', async () => {
   console.log('Fetching all feeds...');
@@ -322,7 +300,6 @@ cron.schedule('*/30 * * * *', async () => {
   for (const feed of feeds) {
     await fetchFeedArticles(feed.id, feed.url);
   }
-  await pruneOldArticles();
 });
 
 app.listen(PORT, '0.0.0.0', () => {
